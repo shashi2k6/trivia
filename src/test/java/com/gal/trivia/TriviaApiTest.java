@@ -6,12 +6,11 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 
 @AutoConfigureMockMvc
-@AutoConfigureTestDatabase
 @SpringBootTest
 public class TriviaApiTest {
 
     @Test
-    public void test_method() {
-        
+    public void test_() {
+
     }
 }
