@@ -14,17 +14,15 @@ import java.util.Set;
 public class Question {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private long quiz_id;
     private long question_number;
     private String question;
     private Date created_at;
 
-    public Question() {
-    }
-
-    @OneToMany
-    @JoinColumn(name = "question_id")
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "afkid",referencedColumnName = "id")
     private List<Answer> answer;
 
 }

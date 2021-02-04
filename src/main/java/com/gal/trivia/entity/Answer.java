@@ -1,6 +1,7 @@
 package com.gal.trivia.entity;
 
 import lombok.Data;
+import org.springframework.web.bind.annotation.GetMapping;
 
 import javax.persistence.*;
 
@@ -10,18 +11,11 @@ import javax.persistence.*;
 public class Answer {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-
     private long question_id;
     private String choice;
     private String text;
     private boolean correct;
-
-    public Answer() {
-    }
-
-    @ManyToOne()
-    @JoinColumn(name="quiz_id")
-    private Question question;
 
 }

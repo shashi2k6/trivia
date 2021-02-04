@@ -49,22 +49,18 @@ class TriviaApplicationTests {
         Question question = new Question();
         question.setId(15001);
         question.setQuiz_id(1);
+        question.setQuestion_number(15001);
         question.setQuestion("What is the capital of US ?");
+        question.setCreated_at(new Date());
 
         Answer answer = new Answer();
         answer.setId(25000);
         answer.setQuestion_id(15001);
-        answer.setText("Newyork");
         answer.setChoice("A");
+        answer.setText("Newyork");
 
-        Answer answer1 = new Answer();
-        answer1.setId(25001);
-        answer1.setQuestion_id(15001);
-        answer1.setText("Washington");
-        answer1.setChoice("B");
 
-        question.setCreated_at(new Date());
-        question.setAnswer(Arrays.asList(answer, answer1));
+        question.setAnswer(Arrays.asList(answer));
 
         mockMvc.perform(post("/api/questions")
                 .contentType(MediaType.APPLICATION_JSON)

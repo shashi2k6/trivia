@@ -1,7 +1,7 @@
 package com.gal.trivia.service;
 
 import com.gal.trivia.entity.Question;
-import com.gal.trivia.entity.QuestionRepositiory;
+import com.gal.trivia.entity.QuestionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,22 +15,22 @@ import java.util.stream.IntStream;
 public class TriviaService {
 
     @Autowired
-    private QuestionRepositiory questionRepositiory;
+    private QuestionRepository questionRepository;
 
     public List<Question> getRandomQuestions() {
-        List<Question> questionList = questionRepositiory.findAll();
+        List<Question> questionList = questionRepository.findAll();
         IntStream intStream = new Random().ints(10, 0, questionList.size());
         List<Integer> randomList = intStream.map(i -> Integer.valueOf(i)).boxed().collect(Collectors.toList());
         List<Question> randomQuestions = new ArrayList<>();
 
-        randomList.stream().forEach(no -> {
-            Question question = questionList.get(no);
+        randomList.stream().forEach(qno -> {
+            Question question = questionList.get(qno);
             randomQuestions.add(question);
         });
         return randomQuestions;
     }
 
     public void addQuestion(Question question) {
-        questionRepositiory.save(question);
+        questionRepository.save(question);
     }
 }
