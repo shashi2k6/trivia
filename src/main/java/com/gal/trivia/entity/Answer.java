@@ -20,9 +20,9 @@ public class Answer {
     public Answer() {
     }
 
-   // @ManyToOne
-    //@JoinColumn(name="question_id",referencedColumnName = "quiz_id")
-    //private Question question;
+    @ManyToOne()
+    @JoinColumn(name="quiz_id")
+    private Question question;
 
 
 }
