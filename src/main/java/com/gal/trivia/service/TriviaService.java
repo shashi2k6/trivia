@@ -31,6 +31,8 @@ public class TriviaService {
     }
 
     public void addQuestion(Question question) {
-        questionRepositiory.save(question);
+
+        Question question1 = questionRepositiory.save(question);
+        System.out.println(question1.getId());
     }
 }
