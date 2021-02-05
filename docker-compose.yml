@@ -13,7 +13,7 @@ services:
     environment:
       DB_HOST: mysqldb
       DB_USER: root
-      DB_PASSWORD: root
+      DB_PASSWORD: password
       DB_NAME: triviadb
       SPRING_PROFILES_ACTIVE: mysql
     depends_on:
