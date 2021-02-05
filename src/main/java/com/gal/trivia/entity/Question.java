@@ -24,6 +24,7 @@ public class Question {
     private String timestamp;
 
     @OneToMany(cascade =CascadeType.ALL)
-    @JoinColumn( name = "so_fid", referencedColumnName = "id")    private List<Answer> answers;
+    @JoinColumn( name = "so_fid", referencedColumnName = "id")
+    private List<Answer> answers;
 
 }

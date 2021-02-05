@@ -31,7 +31,7 @@ public class TriviaService {
     }
 
     public void addQuestion(Question question) {
-        Question question1 = questionRepository.save(question);
+        questionRepository.save(question);
     }
 
     public Question getQuestionById(Long id) {
