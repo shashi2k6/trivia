@@ -35,4 +35,16 @@ public class TriviaService {
         Question question1 = questionRepositiory.save(question);
         System.out.println(question1.getId());
     }
+
+    public Question getQuestionById(Long id) {
+        return questionRepositiory.findById(id).orElse(new Question());
+    }
+
+    public void deleteQuestionById(Long id) {
+        questionRepositiory.deleteById(id);
+    }
+
+    public Question updateQuestionById(Question question) {
+        return questionRepositiory.save(question);
+    }
 }

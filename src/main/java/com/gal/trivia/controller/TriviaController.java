@@ -24,4 +24,24 @@ public class TriviaController {
     public void addQuestion(@RequestBody Question question) {
         triviaService.addQuestion(question);
     }
+
+    @GetMapping("/api/questions/{id}")
+    public Question getQuestionById(@PathVariable Long id) {
+        return triviaService.getQuestionById(id);
+    }
+
+
+    @DeleteMapping("/api/questions/{id}")
+    public void getRandomQuestions(@PathVariable Long id) {
+         triviaService.deleteQuestionById(id);
+    }
+
+
+    @PutMapping("/api/questions")
+    public Question getRandomQuestions(@RequestBody Question question) {
+
+        return triviaService.updateQuestionById(question);
+    }
+
+
 }

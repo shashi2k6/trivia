@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gal.trivia.entity.Answer;
 import com.gal.trivia.entity.Question;
 import com.gal.trivia.entity.QuestionRepositiory;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,8 +19,9 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.util.Arrays;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.hamcrest.Matchers.hasSize;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
@@ -43,15 +43,13 @@ public class TriviaApplicationTests {
     @BeforeEach
     public void init() throws IOException {
 
-		ObjectMapper objectMapper = new ObjectMapper();
-		Question[] questions = objectMapper.readValue(Files.readAllBytes(dataFile.getFile().toPath()), Question[].class);
+        ObjectMapper objectMapper = new ObjectMapper();
+        Question[] questions = objectMapper.readValue(Files.readAllBytes(dataFile.getFile().toPath()), Question[].class);
 
-		Arrays.stream(questions).sequential().forEach(question -> {
-			questionRepositiory.save(question);
-		});
+        Arrays.stream(questions).sequential().forEach(question -> {
+            questionRepositiory.save(question);
+        });
 
-
-		System.out.println("done");
     }
 
     /**
@@ -62,8 +60,8 @@ public class TriviaApplicationTests {
     @Test
     public void test_getRandom_Question() throws Exception {
         mockMvc.perform(get("/api/questions")).
-                andExpect(status().isOk());
-               // .andExpect(jsonPath("$", hasSize(10)));
+                andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(10)));
     }
 
     /**
@@ -91,4 +89,33 @@ public class TriviaApplicationTests {
                 .content(objectMapper.writeValueAsString(question)))
                 .andExpect(status().isCreated());
     }
+
+
+    @Test
+    public void test_delete_Question() throws Exception {
+        mockMvc.perform(delete("/api/questions/5827")).
+                andExpect(status().isOk());
+    }
+
+    @Test
+    public void test_get_question_byId() throws Exception {
+        mockMvc.perform(get("/api/questions/5998")).
+                andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(5998));
+    }
+
+    @Test
+    public void test_update_Question() throws Exception {
+
+
+        Question question = new Question();
+        question.setId(6024);
+        question.setQuestion("The lyric ? dark side of the sun? is sung in what Pink Floyd song?");
+        question.setTimestamp("2021-02-04 20:04:25");
+
+        mockMvc.perform(put("/api/questions")
+                .contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(question)))
+                .andExpect(status().isOk());
+    }
+
 }
