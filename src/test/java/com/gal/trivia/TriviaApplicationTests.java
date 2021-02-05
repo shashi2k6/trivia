@@ -3,7 +3,7 @@ package com.gal.trivia;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gal.trivia.entity.Answer;
 import com.gal.trivia.entity.Question;
-import com.gal.trivia.entity.QuestionRepositiory;
+import com.gal.trivia.repository.QuestionRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,27 +29,25 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Transactional
 public class TriviaApplicationTests {
 
-    @Autowired
-    private MockMvc mockMvc;
-    @Autowired
-    private ObjectMapper objectMapper;
-
     @Value("classpath:trivia.json")
     Resource dataFile;
 
     @Autowired
-    private QuestionRepositiory questionRepositiory;
+    private MockMvc mockMvc;
+
+    @Autowired
+    private ObjectMapper objectMapper;
+
+    @Autowired
+    private QuestionRepository questionRepository;
 
     @BeforeEach
     public void init() throws IOException {
-
         ObjectMapper objectMapper = new ObjectMapper();
         Question[] questions = objectMapper.readValue(Files.readAllBytes(dataFile.getFile().toPath()), Question[].class);
-
         Arrays.stream(questions).sequential().forEach(question -> {
-            questionRepositiory.save(question);
+            questionRepository.save(question);
         });
-
     }
 
     /**
@@ -91,12 +89,22 @@ public class TriviaApplicationTests {
     }
 
 
+    /**
+     * Delete the question from the DB
+     *
+     * @throws Exception
+     */
     @Test
     public void test_delete_Question() throws Exception {
         mockMvc.perform(delete("/api/questions/5827")).
                 andExpect(status().isOk());
     }
 
+    /**
+     * Get the question by id.
+     *
+     * @throws Exception
+     */
     @Test
     public void test_get_question_byId() throws Exception {
         mockMvc.perform(get("/api/questions/5998")).
@@ -104,10 +112,13 @@ public class TriviaApplicationTests {
                 .andExpect(jsonPath("$.id").value(5998));
     }
 
+    /**
+     * Update the question by id.
+     *
+     * @throws Exception
+     */
     @Test
     public void test_update_Question() throws Exception {
-
-
         Question question = new Question();
         question.setId(6024);
         question.setQuestion("The lyric ? dark side of the sun? is sung in what Pink Floyd song?");
@@ -117,5 +128,4 @@ public class TriviaApplicationTests {
                 .contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(question)))
                 .andExpect(status().isOk());
     }
-
 }

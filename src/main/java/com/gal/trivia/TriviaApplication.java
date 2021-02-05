@@ -2,7 +2,7 @@ package com.gal.trivia;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gal.trivia.entity.Question;
-import com.gal.trivia.entity.QuestionRepositiory;
+import com.gal.trivia.repository.QuestionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
@@ -16,27 +16,24 @@ import java.util.Arrays;
 @SpringBootApplication
 public class TriviaApplication implements CommandLineRunner {
 
-	@Value("classpath:trivia.json")
-	Resource dataFile;
+    @Value("classpath:trivia.json")
+    Resource dataFile;
 
-	@Autowired
-	private QuestionRepositiory questionRepositiory;
+    @Autowired
+    private QuestionRepository questionRepository;
 
-	public static void main(String[] args) {
-		SpringApplication.run(TriviaApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(TriviaApplication.class, args);
+    }
 
-	@Override
-	public void run(String... args) throws Exception {
+    @Override
+    public void run(String... args) throws Exception {
 
-		ObjectMapper objectMapper = new ObjectMapper();
-		Question[] questions = objectMapper.readValue(Files.readAllBytes(dataFile.getFile().toPath()), Question[].class);
+        ObjectMapper objectMapper = new ObjectMapper();
+        Question[] questions = objectMapper.readValue(Files.readAllBytes(dataFile.getFile().toPath()), Question[].class);
 
-		Arrays.stream(questions).sequential().forEach(question -> {
-			questionRepositiory.save(question);
-		});
-
-
-		System.out.println("done");
-	}
+        Arrays.stream(questions).sequential().forEach(question -> {
+            questionRepository.save(question);
+        });
+    }
 }
