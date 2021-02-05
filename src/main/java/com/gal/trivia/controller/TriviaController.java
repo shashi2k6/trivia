@@ -27,6 +27,7 @@ public class TriviaController {
     }
 
     @GetMapping("/questions/{id}")
+    @ResponseStatus(HttpStatus.OK)
     public Question getQuestionById(@PathVariable Long id) {
         return triviaService.getQuestionById(id);
     }
