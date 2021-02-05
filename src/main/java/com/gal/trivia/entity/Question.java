@@ -1,30 +1,29 @@
 package com.gal.trivia.entity;
 
-import lombok.Data;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 @Entity
-@Data
+@Getter
+@Setter
 @Table(name = "question")
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Question {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
-    private long quiz_id;
-    private long question_number;
     private String question;
-    private Date created_at;
+    private long question_num;
+    private String timestamp;
 
-    public Question() {
-    }
-
-    @OneToMany
-    @JoinColumn(name = "question_id")
-    private List<Answer> answer;
+    @OneToMany(cascade =CascadeType.ALL)
+    @JoinColumn( name = "so_fid", referencedColumnName = "id")    private List<Answer> answers;
 
 }

@@ -1,28 +1,25 @@
 package com.gal.trivia.entity;
 
-import lombok.Data;
+import lombok.*;
 
 import javax.persistence.*;
 
 @Entity
-@Data
+@Getter
+@Setter
 @Table(name="answer")
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class Answer {
 
     @Id
+    @GeneratedValue
     private long id;
 
-    private long question_id;
     private String choice;
     private String text;
     private boolean correct;
-
-    public Answer() {
-    }
-
-    @ManyToOne()
-    @JoinColumn(name="quiz_id")
-    private Question question;
 
 
 }

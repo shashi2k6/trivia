@@ -17,9 +17,8 @@ public class TriviaService {
     @Autowired
     private QuestionRepositiory questionRepositiory;
 
-    public List<Question> getRandomQuestions(){
-
-        List<Question> questionList= questionRepositiory.findAll();
+    public List<Question> getRandomQuestions() {
+        List<Question> questionList = questionRepositiory.findAll();
         IntStream intStream = new Random().ints(10, 0, questionList.size());
         List<Integer> randomList = intStream.map(i -> Integer.valueOf(i)).boxed().collect(Collectors.toList());
         List<Question> randomQuestions = new ArrayList<>();
@@ -28,7 +27,12 @@ public class TriviaService {
             Question question = questionList.get(no);
             randomQuestions.add(question);
         });
-
         return randomQuestions;
+    }
+
+    public void addQuestion(Question question) {
+
+        Question question1 = questionRepositiory.save(question);
+        System.out.println(question1.getId());
     }
 }
