@@ -9,39 +9,35 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@RequestMapping("/api")
 public class TriviaController {
 
     @Autowired
     private TriviaService triviaService;
 
-    @GetMapping("/api/questions")
+    @GetMapping("/questions")
     public List<Question> getRandomQuestions() {
         return triviaService.getRandomQuestions();
     }
 
-    @PostMapping("/api/questions")
+    @PostMapping("/questions")
     @ResponseStatus(HttpStatus.CREATED)
     public void addQuestion(@RequestBody Question question) {
         triviaService.addQuestion(question);
     }
 
-    @GetMapping("/api/questions/{id}")
+    @GetMapping("/questions/{id}")
     public Question getQuestionById(@PathVariable Long id) {
         return triviaService.getQuestionById(id);
     }
 
-
-    @DeleteMapping("/api/questions/{id}")
+    @DeleteMapping("/questions/{id}")
     public void getRandomQuestions(@PathVariable Long id) {
          triviaService.deleteQuestionById(id);
     }
 
-
-    @PutMapping("/api/questions")
+    @PutMapping("/questions")
     public Question getRandomQuestions(@RequestBody Question question) {
-
         return triviaService.updateQuestionById(question);
     }
-
-
 }
