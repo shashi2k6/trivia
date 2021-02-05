@@ -56,7 +56,7 @@ public class TriviaApplicationTests {
      * @throws Exception
      */
     @Test
-    public void test_getRandom_Question() throws Exception {
+    public void test_getRandomQuestion() throws Exception {
         mockMvc.perform(get("/api/questions")).
                 andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(10)));
@@ -66,8 +66,59 @@ public class TriviaApplicationTests {
      * @throws Exception
      */
     @Test
-    public void test_addQuestion() throws Exception {
+    public void test_addQuestionAndAnswer() throws Exception {
+        mockMvc.perform(post("/api/questions")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(getQuestionAndAnswerObject())))
+                .andExpect(status().isCreated());
+    }
 
+    /**
+     * Delete the question from the DB
+     *
+     * @throws Exception
+     */
+    @Test
+    public void test_deleteQuestionById() throws Exception {
+        mockMvc.perform(delete("/api/questions/5827")).
+                andExpect(status().isOk());
+    }
+
+    /**
+     * Get the question by id.
+     *
+     * @throws Exception
+     */
+    @Test
+    public void test_getQuestionById() throws Exception {
+        mockMvc.perform(get("/api/questions/5998")).
+                andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(5998));
+    }
+
+    /**
+     * Update the question by id.
+     *
+     * @throws Exception
+     */
+    @Test
+    public void test_updateQuestionById() throws Exception {
+        Question question = new Question();
+        question.setId(6024);
+        question.setQuestion("The lyric ? dark side of the sun? is sung in what Pink Floyd song?");
+        question.setTimestamp("2021-02-04 20:04:25");
+
+        mockMvc.perform(put("/api/questions")
+                .contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(question)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(6024));
+    }
+
+
+    /**
+     * @return
+     */
+    private Question getQuestionAndAnswerObject() {
         Question question = new Question();
         question.setQuestion("What is the capital of US ?");
 
@@ -81,52 +132,7 @@ public class TriviaApplicationTests {
 
         question.setTimestamp("2018-02-02 20:04:25");
         question.setAnswers(Arrays.asList(answer));
-
-        mockMvc.perform(post("/api/questions")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(question)))
-                .andExpect(status().isCreated());
+        return question;
     }
 
-
-    /**
-     * Delete the question from the DB
-     *
-     * @throws Exception
-     */
-    @Test
-    public void test_delete_Question() throws Exception {
-        mockMvc.perform(delete("/api/questions/5827")).
-                andExpect(status().isOk());
-    }
-
-    /**
-     * Get the question by id.
-     *
-     * @throws Exception
-     */
-    @Test
-    public void test_get_question_byId() throws Exception {
-        mockMvc.perform(get("/api/questions/5998")).
-                andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(5998));
-    }
-
-    /**
-     * Update the question by id.
-     *
-     * @throws Exception
-     */
-    @Test
-    public void test_update_Question() throws Exception {
-        Question question = new Question();
-        question.setId(6024);
-        question.setQuestion("The lyric ? dark side of the sun? is sung in what Pink Floyd song?");
-        question.setTimestamp("2021-02-04 20:04:25");
-
-        mockMvc.perform(put("/api/questions")
-                .contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(question)))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(6024));
-    }
 }
