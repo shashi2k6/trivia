@@ -126,6 +126,7 @@ public class TriviaApplicationTests {
 
         mockMvc.perform(put("/api/questions")
                 .contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(question)))
-                .andExpect(status().isOk());
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(6024));
     }
 }
