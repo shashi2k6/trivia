@@ -27,7 +27,7 @@ public class TriviaService {
             Question question = questionList.get(no);
             randomQuestions.add(question);
         });
-        return randomQuestions;
+        return randomQuestions != null && randomQuestions.size() > 0 ? randomQuestions : new ArrayList<Question>();
     }
 
     public void addQuestion(Question question) {
