@@ -12,12 +12,15 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.io.Resource;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.event.annotation.BeforeTestClass;
 import org.springframework.test.web.servlet.MockMvc;
 
+import javax.annotation.PostConstruct;
 import javax.transaction.Transactional;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.Arrays;
+import java.util.List;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -40,8 +43,9 @@ public class TriviaApplicationTests {
     @Autowired
     private QuestionRepositiory questionRepositiory;
 
-    @BeforeEach
+    @PostConstruct
     public void init() throws IOException {
+
 
         ObjectMapper objectMapper = new ObjectMapper();
         Question[] questions = objectMapper.readValue(Files.readAllBytes(dataFile.getFile().toPath()), Question[].class);
@@ -49,6 +53,7 @@ public class TriviaApplicationTests {
         Arrays.stream(questions).sequential().forEach(question -> {
             questionRepositiory.save(question);
         });
+
 
     }
 
@@ -93,12 +98,14 @@ public class TriviaApplicationTests {
 
     @Test
     public void test_delete_Question() throws Exception {
+        init();
         mockMvc.perform(delete("/api/questions/5827")).
                 andExpect(status().isOk());
     }
 
     @Test
     public void test_get_question_byId() throws Exception {
+        List<Question> questionList = questionRepositiory.findAll();
         mockMvc.perform(get("/api/questions/5998")).
                 andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(5998));
